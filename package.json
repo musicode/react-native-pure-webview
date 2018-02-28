@@ -1,0 +1,27 @@
+{
+  "name": "react-native-pure-webview",
+  "version": "1.0.0",
+  "description": "react native webview",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/musicode/react-native-pure-webview.git"
+  },
+  "keywords": [
+    "react",
+    "native",
+    "webview"
+  ],
+  "author": "musicode",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/musicode/react-native-pure-webview/issues"
+  },
+  "homepage": "https://github.com/musicode/react-native-pure-webview#readme",
+  "dependencies": {
+    "react-native-wkwebview-reborn": "^1.14.0"
+  }
+}
