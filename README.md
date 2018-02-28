@@ -13,3 +13,5 @@ function receiveMessage(data) {
 ```
 
 WebView 组件的 `onMessage` 参数为实际的数据，如果是 json，会经过 JSON.parse 再传入
+
+为了方便使用，WebView 组件的 `postMessage` 方法和网页中的 `sendMessage` 支持传对象，内部会 JSON.stringify 再发送出去。

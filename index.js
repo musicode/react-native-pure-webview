@@ -14,6 +14,9 @@ const isIos = Platform.OS === 'ios'
 
 const script = `
 window.sendMessage = function (str) {
+  if (str && typeof str === 'object') {
+    str = JSON.stringify(str);
+  }
   if (${isIos}) {
     str = encodeURIComponent(str);
   }
@@ -71,6 +74,9 @@ export default class PureWebView extends Component {
   }
 
   postMessage(str) {
+    if (str && typeof str === 'object') {
+      str = JSON.stringify(str)
+    }
     this.refs.webview.postMessage(
       isIos ? encodeURIComponent(str) : str
     )
