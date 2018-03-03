@@ -87,6 +87,9 @@ export default class PureWebView extends Component {
     if (injectedJavaScript) {
       injectedJavaScript = script + injectedJavaScript
     }
+    else {
+      injectedJavaScript = script
+    }
     return (
       <WebViewComponent
         {...props}
