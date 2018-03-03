@@ -83,11 +83,15 @@ export default class PureWebView extends Component {
   }
 
   render() {
+    let { injectedJavaScript, ...props } = this.props
+    if (injectedJavaScript) {
+      injectedJavaScript = script + injectedJavaScript
+    }
     return (
       <WebViewComponent
-        {...this.props}
+        {...props}
         ref="webview"
-        injectedJavaScript={script}
+        injectedJavaScript={injectedJavaScript}
         allowsInlineMediaPlayback={true}
         hideKeyboardAccessoryView={true}
         onMessage={this.handleMessage}
