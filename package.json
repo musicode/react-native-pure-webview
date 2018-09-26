@@ -1,6 +1,6 @@
 {
   "name": "react-native-pure-webview",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "react native webview",
   "main": "index.js",
   "scripts": {

@@ -17,16 +17,10 @@ window.sendMessage = function (str) {
   if (str && typeof str === 'object') {
     str = JSON.stringify(str);
   }
-  if (${isIos}) {
-    str = encodeURIComponent(str);
-  }
   postMessage(str);
 };
 document.addEventListener('message', function (event) {
   var data = event.data;
-  if (${isIos}) {
-    data = decodeURIComponent(data);
-  }
   if (data.indexOf('{') === 0 && data.lastIndexOf('}') === data.length - 1) {
     try {
       data = JSON.parse(data);
@@ -38,6 +32,9 @@ document.addEventListener('message', function (event) {
   }
   receiveMessage && receiveMessage(data);
 });
+if (typeof onWebViewReady === 'function') {
+  onWebViewReady();
+}
 `
 
 const WebViewComponent = isIos ? WKWebView : WebView
@@ -52,17 +49,11 @@ export default class PureWebView extends Component {
     if (onMessage) {
 
       let { data } = event.nativeEvent
-
-      if (isIos) {
-        data = decodeURIComponent(data)
-      }
-
       if (data.indexOf('{') === 0 && data.lastIndexOf('}') === data.length - 1) {
         try {
           data = JSON.parse(data)
         }
         catch (error) {
-          console.log(data, error)
           return
         }
       }
@@ -77,9 +68,7 @@ export default class PureWebView extends Component {
     if (str && typeof str === 'object') {
       str = JSON.stringify(str)
     }
-    this.refs.webview.postMessage(
-      isIos ? encodeURIComponent(str) : str
-    )
+    this.refs.webview.postMessage(str)
   }
 
   render() {
