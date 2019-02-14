@@ -26,13 +26,12 @@ document.addEventListener('message', function (event) {
   receiveMessage && receiveMessage(data);
 });
 sendMessage({
-  command: 'ready',
-  title: document.title
+  command: 'ready'
 });
 `
 
-// 最后这句 sendMessage 是为 Ios 准备的
-// 因为 Ios 不会触发 onLoad ...
+// 最后这句 sendMessage 是为 iOS 准备的
+// 因为 iOS 不会触发 onLoad ...
 // 因此机制变成了双重保证，即 onLoad 或 webview 谁先触发 load 就谁赢了
 
 export default class PureWebView extends Component {
