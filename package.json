@@ -1,6 +1,6 @@
 {
   "name": "react-native-pure-webview",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "react native webview",
   "main": "index.js",
   "scripts": {
@@ -22,6 +22,6 @@
   },
   "homepage": "https://github.com/musicode/react-native-pure-webview#readme",
   "peerDependencies": {
-    "react-native-webview": "^5.2.0"
+    "react-native-webview": "^2.5.0"
   }
 }
