@@ -1,6 +1,6 @@
 
 import React, {
-  Component,
+  PureComponent,
 } from 'react'
 
 import { WebView } from 'react-native-webview'
@@ -10,33 +10,35 @@ window.sendMessage = function (str) {
   if (str && typeof str === 'object') {
     str = JSON.stringify(str);
   }
-  postMessage(str);
-};
-document.addEventListener('message', function (event) {
-  var data = event.data;
-  if (data.indexOf('{') === 0 && data.lastIndexOf('}') === data.length - 1) {
-    try {
-      data = JSON.parse(data);
-    }
-    catch (error) {
-      sendMessage('json parse error: ' + data);
-      return;
-    }
+  try {
+    window.ReactNativeWebView.postMessage(str);
   }
-  receiveMessage && receiveMessage(data);
-});
-sendMessage({
-  command: 'ready'
-});
+  catch (e) {
+    console.log(e);
+  }
+};
+if (!window.receiveMessage) {
+  window.receiveMessage = function () { };
+}
+sendMessage('ready');
+if (window.bridgeReady) {
+  window.bridgeReady();
+}
 `
 
-// 最后这句 sendMessage 是为 iOS 准备的
-// 因为 iOS 不会触发 onLoad ...
-// 因此机制变成了双重保证，即 onLoad 或 webview 谁先触发 load 就谁赢了
-
-export default class PureWebView extends Component {
+export default class PureWebView extends PureComponent {
 
   static propTypes = WebView.propTypes
+
+  static defaultProps = {
+    originWhitelist: ['*'],
+    domStorageEnabled: true,
+    allowsInlineMediaPlayback: true,
+    hideKeyboardAccessoryView: true,
+    geolocationEnabled: true,
+    shouldStartLoad: true,
+    useWebKit: true,
+  }
 
   handleMessage = event => {
 
@@ -54,7 +56,7 @@ export default class PureWebView extends Component {
         }
       }
 
-      if (data && data.command === 'ready') {
+      if (data === 'ready') {
         this.markReady()
       }
 
@@ -65,31 +67,38 @@ export default class PureWebView extends Component {
   }
 
   postMessage(str) {
+    if (!this.ready) {
+      return
+    }
     if (str && typeof str === 'object') {
       str = JSON.stringify(str)
     }
-    this.refs.webview.postMessage(str)
+    this.injectJavaScript(
+      `receiveMessage(${str});`
+    )
   }
 
-  markReady() {
-    if (!this.ready) {
-      this.ready = true
-      let { onLoad } = this.props
-      onLoad && onLoad()
+  injectJavaScript(code) {
+    this.refs.webview.injectJavaScript(code)
+  }
+
+  markReady = () => {
+    if (this.ready) {
+      return
     }
+    this.ready = true
+    let { onLoad } = this.props
+    onLoad && onLoad()
   }
 
   handleLoad = () => {
-    this.markReady()
-    this.postMessage({
-      command: 'ready'
-    })
+
   }
 
   render() {
     let { injectedJavaScript, ...props } = this.props
     if (injectedJavaScript) {
-      injectedJavaScript = script + injectedJavaScript
+      injectedJavaScript = injectedJavaScript + script
     }
     else {
       injectedJavaScript = script
@@ -99,8 +108,6 @@ export default class PureWebView extends Component {
         {...props}
         ref="webview"
         injectedJavaScript={injectedJavaScript}
-        allowsInlineMediaPlayback={true}
-        hideKeyboardAccessoryView={true}
         onMessage={this.handleMessage}
         onLoad={this.handleLoad}
       />
