@@ -70,8 +70,14 @@ export default class PureWebView extends PureComponent {
     if (!this.ready) {
       return
     }
-    if (str && typeof str === 'object') {
-      str = JSON.stringify(str)
+    if (str) {
+      let type = typeof str
+      if (type === 'object') {
+        str = JSON.stringify(str)
+      }
+      else if (type === 'string') {
+        str = `"${str}"`
+      }
     }
     this.injectJavaScript(
       `receiveMessage(${str});`
