@@ -84,6 +84,22 @@ export default class PureWebView extends PureComponent {
     )
   }
 
+  goForward() {
+    this.refs.webview.goForward()
+  }
+
+  goBack() {
+    this.refs.webview.goBack()
+  }
+
+  reload() {
+    this.refs.webview.reload()
+  }
+
+  stopLoading() {
+    this.refs.webview.stopLoading()
+  }
+
   injectJavaScript(code) {
     this.refs.webview.injectJavaScript(code)
   }
