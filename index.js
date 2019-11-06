@@ -118,7 +118,7 @@ export default class PureWebView extends PureComponent {
   }
 
   render() {
-    let { injectedJavaScript, ...props } = this.props
+    let { injectedJavaScript, ref, ...props } = this.props
     if (injectedJavaScript) {
       injectedJavaScript = injectedJavaScript + script
     }
