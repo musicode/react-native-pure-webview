@@ -1,5 +1,6 @@
 
 import React, {
+  createRef,
   PureComponent,
 } from 'react'
 
@@ -38,6 +39,11 @@ export default class PureWebView extends PureComponent {
     geolocationEnabled: true,
     shouldStartLoad: true,
     useWebKit: true,
+  }
+
+  constructor(props) {
+    super(props)
+    this.webviewRef = createRef()
   }
 
   handleMessage = event => {
@@ -85,23 +91,23 @@ export default class PureWebView extends PureComponent {
   }
 
   goForward() {
-    this.refs.webview.goForward()
+    this.webviewRef.current?.goForward()
   }
 
   goBack() {
-    this.refs.webview.goBack()
+    this.webviewRef.current?.goBack()
   }
 
   reload() {
-    this.refs.webview.reload()
+    this.webviewRef.current?.reload()
   }
 
   stopLoading() {
-    this.refs.webview.stopLoading()
+    this.webviewRef.current?.stopLoading()
   }
 
   injectJavaScript(code) {
-    this.refs.webview.injectJavaScript(code)
+    this.webviewRef.current?.injectJavaScript(code)
   }
 
   markReady = () => {
@@ -128,7 +134,7 @@ export default class PureWebView extends PureComponent {
     return (
       <WebView
         {...props}
-        ref="webview"
+        ref={this.webviewRef}
         injectedJavaScript={injectedJavaScript}
         onMessage={this.handleMessage}
         onLoad={this.handleLoad}
