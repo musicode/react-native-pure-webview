@@ -124,18 +124,33 @@ export default class PureWebView extends PureComponent {
   }
 
   render() {
-    let { injectedJavaScript, ...props } = this.props
+
+    let {
+      injectedJavaScript,
+      injectedJavaScriptBeforeContentLoaded,
+      ...props
+    } = this.props
+
     if (injectedJavaScript) {
       injectedJavaScript = injectedJavaScript + script
     }
     else {
       injectedJavaScript = script
     }
+
+    if (injectedJavaScriptBeforeContentLoaded) {
+      injectedJavaScriptBeforeContentLoaded = injectedJavaScriptBeforeContentLoaded + script
+    }
+    else {
+      injectedJavaScriptBeforeContentLoaded = script
+    }
+
     return (
       <WebView
         {...props}
         ref={this.webviewRef}
         injectedJavaScript={injectedJavaScript}
+        injectedJavaScriptBeforeContentLoaded={injectedJavaScriptBeforeContentLoaded}
         onMessage={this.handleMessage}
         onLoad={this.handleLoad}
       />
